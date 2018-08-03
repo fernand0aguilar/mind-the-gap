@@ -13,10 +13,10 @@ const IMG_SIZE = 28;
 const IMG_BYTES = IMG_SIZE * IMG_SIZE;
 
 function preload(){
-  angels_data = loadBytes('QuickDrawData/data/angels1000.bin');
-  bicycles_data = loadBytes('QuickDrawData/data/bicycle1000.bin');
-  owls_data = loadBytes('QuickDrawData/data/owl1000.bin');
-  turtles_data = loadBytes('QuickDrawData/data/turtle1000.bin');
+  angels_data = loadBytes('data/angels1000.bin');
+  bicycles_data = loadBytes('data/bicycle1000.bin');
+  owls_data = loadBytes('data/owl1000.bin');
+  turtles_data = loadBytes('data/turtle1000.bin');
 }
 
 function setup(){

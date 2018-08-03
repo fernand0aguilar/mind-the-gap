@@ -5,7 +5,24 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/addons/p5.dom.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/addons/p5.sound.min.js"></script>
   <script src="sketch.js"></script>
+  <script src="loadbinary.js"></script>
+  <script src="lib/neuralnetwork.js"></script>
+  <script src="lib/matrix.js"></script>
+
+  <style>
+  	body {
+  		background-color: #AAA;
+  	}
+  	button {
+  		font-size: 24pt;
+  		margin: 20px;
+  	}
+</style>
 </head>
 <body>
+	<button id="train">Train</button>
+	<button id="test">Test</button>
+	<button id="guess">Guess</button>
+	<button id="clear">Clear</button>
 </body>
 </html>
