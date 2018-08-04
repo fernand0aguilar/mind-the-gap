@@ -28,19 +28,25 @@ function preload(){
 
 function setup(){
   createCanvas(280, 280);
-  background(51);
-
-  divideDataset();
+  background(255);
 
   nn = new NeuralNetwork(784, 64, 4);
 
-  let training = trainEpoch();
-  let testing = testData();
+  divideDataset();
 
-  trainNeuralNetwork(training);
-  let perc = testNeuralNetwork(testing);
-  console.log("% correct:" + perc);
+  let trainButton = select('#train');
+  let testButton = select('#test');
+  let guessButton = select('#guess');
+  let clearButton = select('#clear');
 
-  // showImage(bicycles_data);
+  handleButtons(trainButton, testButton, guessButton, clearButton);
 
+}
+
+function draw(){
+ strokeWeight(8);
+ stroke(0);
+ if (mouseIsPressed) {
+   line(pmouseX, pmouseY, mouseX, mouseY);
+}
 }

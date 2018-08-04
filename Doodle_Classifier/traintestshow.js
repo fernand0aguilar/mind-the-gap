@@ -51,3 +51,51 @@ function showImage(array_data){
     image(img, x, y);
   }
 }
+
+
+function handleButtons(trainButton, testButton, guessButton, clearButton){
+
+  //TRAIN BUTTON
+  let epochCounter = 0;
+  let training = trainEpoch();
+  trainButton.mousePressed(function(){
+    trainNeuralNetwork(training);
+    epochCounter++;
+    console.log("Epoch: " + epochCounter);
+  });
+
+  //TEST BUTTON
+  let testing = testData();
+  testButton.mousePressed(function(){
+    let perc = testNeuralNetwork(testing);
+    console.log("% correct:" + nf(perc, 2, 2) + "%");
+  });
+
+  //GUESS BUTTON
+  guessButton.mousePressed(function(){
+    let inputs = [];
+    let img = get();
+    img.resize(IMG_SIZE, IMG_SIZE);
+    img.loadPixels();
+    for(let i = 0; i < IMG_BYTES; i++){
+      let bright = img.pixels[i * 4];
+      inputs[i] = (255 - bright) / 255.0;
+    }
+    let guess = nn.predict(inputs);
+    let classification = guess.indexOf(max(guess));
+    if(classification === ANGEL){
+      console.log("ANGEL");
+    } else if(classification === BICYCLE){
+      console.log("BICYCLE");
+    } else if(classification === TURTLE){
+      console.log("TURTLE");
+    } else if(classification === OWL){
+      console.log("OWL");
+    }
+  });
+  
+  //CLEAR BUTTON
+  clearButton.mousePressed(function(){
+    background(255);
+  });
+}
