@@ -17,6 +17,7 @@ let tanh = new ActivationFunction(
 
 class NeuralNetwork{
   constructor(in_nodes, hid_nodes, out_nodes){
+    console.log(in_nodes, hid_nodes, out_nodes);
     if(in_nodes instanceof NeuralNetwork){
       /*
       * if first argument is a NeuralNetwork the constructor clones it

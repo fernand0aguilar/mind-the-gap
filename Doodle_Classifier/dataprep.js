@@ -1,7 +1,7 @@
 function divideDataset(){
   prepareData(angels, angels_data, ANGEL);
   prepareData(bicycles, bicycles_data, BICYCLE);
-  prepareData(owls, owls_data, OWL);
+  // prepareData(owls, owls_data, OWL);
   prepareData(turtles, turtles_data, TURTLE);
 }
 
@@ -9,7 +9,7 @@ function trainEpoch(){
   let training = [];
   training = training.concat(angels.training);
   training = training.concat(bicycles.training);
-  training = training.concat(owls.training);
+  // training = training.concat(owls.training);
   training = training.concat(turtles.training);
   return shuffle(training);
 }
@@ -18,8 +18,9 @@ function testData(){
   let testing = [];
   testing = testing.concat(angels.testing);
   testing = testing.concat(bicycles.testing);
-  testing = testing.concat(owls.testing);
+  // testing = testing.concat(owls.testing);
   testing = testing.concat(turtles.testing);
+  return shuffle(testing);
 }
 
 function prepareData(category, data, label){
