@@ -1,3 +1,12 @@
+const TOTAL_LENGTH = 1000;
+const IMG_SIZE = 28;
+const IMG_BYTES = IMG_SIZE * IMG_SIZE;
+
+const ANGEL = 0;
+const BICYCLE = 1;
+const OWL = 2;
+const TURTLE = 3;
+
 let angels_data;
 let bicycles_data;
 let owls_data;
@@ -8,9 +17,7 @@ let bicycles = {};
 let owls = {};
 let turtles = {};
 
-const TOTAL_LENGTH = 1000;
-const IMG_SIZE = 28;
-const IMG_BYTES = IMG_SIZE * IMG_SIZE;
+let nn;
 
 function preload(){
   angels_data = loadBytes('data/angels1000.bin');
@@ -22,49 +29,34 @@ function preload(){
 function setup(){
   createCanvas(280, 280);
   background(51);
-  setupObjects();
+
+  nn = new NeuralNetwork(IMG_BYTES, 64, 4);
+
   divideDataset();
+  let training = trainEpoch();
+
+  trainNeuralNetwork(training);
 
   showImage(bicycles_data);
 
 }
 
-function setupObjects(){
-  angels.training = [];
-  angels.testing = [];
+function trainNeuralNetwork(training){
+  for(let i = 0; i < training.length ; i++){
+    let targets = [0,0,0,0];
+    let inputs = [];
+    let label = training[i].label;
 
-  bicycles.training = [];
-  bicycles.testing = [];
-
-  owls.training = [];
-  owls.testing = [];
-
-  turtles.training = [];
-  turtles.testing = [];
-}
-
-
-function divideDataset(){
-    for(let i = 0; i < TOTAL_LENGTH; i++){
-      let offset = i * IMG_BYTES;
-      let treshold = floor(0.8 * TOTAL_LENGTH);
-
-      if(i < treshold){
-        angels.training[i] = angels_data.bytes.subarray(offset, offset + IMG_BYTES);
-        bicycles.training[i] = bicycles_data.bytes.subarray(offset, offset + IMG_BYTES);
-        owls.training[i] = owls_data.bytes.subarray(offset, offset + IMG_BYTES);
-        turtles.training[i] = turtles_data.bytes.subarray(offset, offset + IMG_BYTES);
-
-      }
-      else{
-        angels.testing[i - treshold] = angels_data.bytes.subarray(offset, offset + IMG_BYTES);
-        bicycles.testing[i - treshold] = bicycles_data.bytes.subarray(offset, offset + IMG_BYTES);
-        owls.testing[i - treshold] = owls_data.bytes.subarray(offset, offset + IMG_BYTES);
-        turtles.testing[i - treshold] = turtles_data.bytes.subarray(offset, offset + IMG_BYTES);
-
-      }
+    for (let j = 0; j < IMG_BYTES; j++){
+      inputs[j] = training[i][j] / 255.0 ;
     }
+    targets[label] = 1;
+    nn.train(inputs, targets);
+  }
+  console.log("Trained for one epoch");
 }
+
+
 
 function showImage(array_data){
   let total = 100;
