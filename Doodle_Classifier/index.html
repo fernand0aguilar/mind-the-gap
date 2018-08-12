@@ -1,5 +1,6 @@
 <!doctype html>
 <html>
+
 <head>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/p5.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/addons/p5.dom.min.js"></script>
@@ -14,19 +15,36 @@
   <script src="traintestshow.js"></script>
 
   <style>
-  	body {
-  		background-color: #AAA;
-  	}
-  	button {
-  		font-size: 24pt;
-  		margin: 20px;
-  	}
-</style>
+    canvas {
+      margin: auto;
+    }
+
+    body {
+      background-color: rgb(51,51,51);
+      margin: 150;
+      padding: 10;
+      overflow: hidden;
+    }
+
+    button {
+      font-size: 24pt;
+      margin: 10px;
+    }
+
+    h2 {
+      color: rgb(255, 0, 255);
+    }
+  </style>
 </head>
+
 <body>
-	<button id="train">Train</button>
-	<button id="test">Test</button>
-	<button id="guess">Guess</button>
-	<button id="clear">Clear</button>
+  <div id="buttons">
+    <button id="train">Train</button>
+    <button id="test">Test</button>
+    <button id="guess">Guess</button>
+    <button id="clear">Clear</button>
+  </div>
+  <h2 id="header"></h2>
 </body>
+
 </html>

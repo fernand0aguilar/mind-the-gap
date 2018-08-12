@@ -19,17 +19,16 @@ let owls = {};
 
 let nn;
 
-function preload(){
+function preload() {
   angels_data = loadBytes('data/angels1000.bin');
   bicycles_data = loadBytes('data/bicycle1000.bin');
   turtles_data = loadBytes('data/turtle1000.bin');
   owls_data = loadBytes('data/owl1000.bin');
 }
 
-function setup(){
-  createCanvas(280, 280);
+function setup() {
+  createCanvas(420, 420);
   background(255);
-
   nn = new NeuralNetwork(784, 64, 4);
 
   divideDataset();
@@ -43,10 +42,10 @@ function setup(){
 
 }
 
-function draw(){
- strokeWeight(8);
- stroke(0);
- if (mouseIsPressed) {
-   line(pmouseX, pmouseY, mouseX, mouseY);
-}
+function draw() {
+  strokeWeight(8);
+  stroke(0);
+  if (mouseIsPressed) {
+    line(pmouseX, pmouseY, mouseX, mouseY);
+  }
 }
