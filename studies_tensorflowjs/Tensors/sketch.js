@@ -8,8 +8,7 @@ const configHidden = {
 const hidden = tf.layers.dense(configHidden);
 
 const configOutput = {
-    units: 3,
-    inputShape: [4],
+    units: 1,
     activation: 'sigmoid'
 };
 const output = tf.layers.dense(configOutput);
@@ -19,11 +18,44 @@ model.add(hidden);
 model.add(output);
 
 const sgdOpt = tf.train.sgd(0.1);
+
 const config = {
   optimizer: sgdOpt,
-  loss: 'meanSquaredError'
+  loss: tf.losses.meanSquaredError
 };
 model.compile(config);
+
+const inputs = tf.tensor2d([
+  [0, 0],
+  [0, 1],
+  [1, 0],
+  [1, 1]
+]);
+
+const outputs = tf.tensor2d([
+  [0],
+  [1],
+  [1],
+  [0]
+]);
+
+train().then(() => {
+  let answer = model.predict(inputs);
+  answer.print();
+  console.log("Training complete!");
+});
+
+
+async function train(){
+  for(let i = 0; i < 1000; i++){
+    const config = {
+      shuffle: true,
+      epochs: 10
+    }
+    const response = await model.fit(inputs, outputs, config);
+    console.log(response.history.loss[0]);
+  }
+}
 // function setup(){
 //   noCanvas();
 //
