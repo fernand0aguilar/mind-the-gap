@@ -21,7 +21,7 @@ const sgdOpt = tf.train.sgd(0.1);
 
 const config = {
   optimizer: sgdOpt,
-  loss: tf.losses.meanSquaredError
+  loss: tf.losses.adam
 };
 model.compile(config);
 
