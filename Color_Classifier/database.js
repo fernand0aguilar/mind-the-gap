@@ -16,30 +16,18 @@ function initDatabase() {
 
 function gotData(results) {
   let data = results.val();
+  
+  let allData = {
+    entries: []
+  };
+
   let keys = Object.keys(data);
-
-  // Processing data
-  for (let key of keys) {
+  for(let key of keys){
     let record = data[key];
-    colorByLabel[record.label].push(record);
-  }
-  console.log("GOT DATA!");
-  visualizeData(label);
-}
-
-function visualizeData(label){
-  // Visualizing Data by Color Label
-  let colorEntry = colorByLabel[label];
-  let x = 0;
-  let y = 0;
-  for (let i = 0; i < colorEntry.length; i++) {
-    noStroke();
-    fill(colorEntry[i].r, colorEntry[i].g, colorEntry[i].b);
-    rect(x, y, 10, 10);
-    x += 10;
-    if (x >= width) {
-      x = 0;
-      y += 10;
+    let id = record.uid;
+    if(!filter[id]) {
+      allData.entries.push(record);
     }
   }
+  saveJSON(allData, 'colorData.json');
 }
