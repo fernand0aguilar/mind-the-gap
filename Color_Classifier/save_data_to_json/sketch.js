@@ -1,3 +1,14 @@
+let filter = {
+  'YGdqOTDDmrbGm80gM5UHicxMBgS2': true,
+  'HUXmyv1dSSUnIvYk976MPWUSaTG2': true,
+  'hPdk0Qpo0Gb5NsWSgxsqPM7M2EA2': true
+};
+
+function setup() {
+  noCanvas();
+  initDatabase();
+}
+
 function initDatabase() {
   let config = {
     apiKey: "AIzaSyDPekCKX4ee6h9NVR2lEITGAM0XIHn-c7c",
@@ -13,19 +24,18 @@ function initDatabase() {
   ref.once('value', gotData);
 }
 
-
 function gotData(results) {
   let data = results.val();
-  
+
   let allData = {
     entries: []
   };
 
   let keys = Object.keys(data);
-  for(let key of keys){
+  for (let key of keys) {
     let record = data[key];
     let id = record.uid;
-    if(!filter[id]) {
+    if (!filter[id]) {
       allData.entries.push(record);
     }
   }
