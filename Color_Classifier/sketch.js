@@ -1,4 +1,5 @@
 let data;
+let model;
 
 function preload() {
   data = loadJSON('./zdata/colorData.json');
@@ -34,5 +35,35 @@ function setup() {
 
   xs.print();
   ys.print();
+
+
+  //Tensorflow neural network 3 inputs, 16 hidden, 9 outputs
+  model = tf.sequential();
+
+  let hidden = tf.layers.dense({
+    units: 16,
+    activation: 'sigmoid',
+    inputDim: [3]
+  });
+
+  let output = tf.layers.dense({
+    units: 9,
+    activation: 'softmax'
+  });
+
+  model.add(hidden);
+  model.add(output);
+
+  const LEARNING_RATE = 0.25;
+  const opt = tf.train.sgd(LEARNING_RATE);
+
+  model.compile({
+    optimizer: opt,
+    loss: 'categoricalCrossentropy'
+  });
+
+  // model.fit(xs, ys);
+  // const
+  // i love you
 
 }
