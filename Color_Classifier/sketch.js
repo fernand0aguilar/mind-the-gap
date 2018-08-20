@@ -1,9 +1,8 @@
 let data;
 let model;
+let xs, ys;
 
-function preload() {
-  data = loadJSON('./zdata/colorData.json');
-}
+let isDataLoaded = false;
 
 const labelList = [
   'red-ish',
@@ -17,6 +16,14 @@ const labelList = [
   'yellow-ish'
 ];
 
+function preload() {
+  data = loadJSON('./zdata/colorData.json');
+  if(data != undefined){
+    console.log("data loaded with success");
+    isDataLoaded = true;
+  }
+}
+
 function setup() {
   let colors = [];
   let labels = [];
@@ -28,14 +35,10 @@ function setup() {
   }
   let labelsTensor = tf.tensor1d(labels, 'int32');
 
-  let xs = tf.tensor2d(colors);
-  let ys = tf.oneHot(labelsTensor, 9);
+  xs = tf.tensor2d(colors);
+  ys = tf.oneHot(labelsTensor, 9);
 
   labelsTensor.dispose();
-
-  xs.print();
-  ys.print();
-
 
   //Tensorflow neural network 3 inputs, 16 hidden, 9 outputs
   model = tf.sequential();
@@ -43,7 +46,7 @@ function setup() {
   let hidden = tf.layers.dense({
     units: 16,
     activation: 'sigmoid',
-    inputDim: [3]
+    inputDim: 3
   });
 
   let output = tf.layers.dense({
@@ -62,8 +65,37 @@ function setup() {
     loss: 'categoricalCrossentropy'
   });
 
-  // model.fit(xs, ys);
-  // const
-  // i love you
+  if (isDataLoaded){
+    trainModel().then(results => {
+      console.log(results.history.loss);
+    });
+  }
+}
 
+
+async function trainModel() {
+  const options = {
+    epochs: 3,
+    validationSplit: 0.1,
+    shuffle: true,
+    callbacks: {
+      onTrainBegin: () => console.log("Training Started"),
+      onTrainEnd: () => console.log("Training Completed"),
+      onEpochEnd: async(num, logs) => {
+        await tf.nextFrame();
+        console.log("Epoch: " + num);
+        console.log("Loss: " + logs.loss);
+      }
+    }
+  };
+
+  return await model.fit(xs, ys, options);
+}
+
+function draw(){
+  background(51);
+  stroke(255, 0, 255);
+  strokeWeight(3);
+  line(frameCount % width, 0, frameCount % width, height);
+  // ellipse(50, 50, )
 }
