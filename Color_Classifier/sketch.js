@@ -25,6 +25,31 @@ function preload() {
 }
 
 function setup() {
+
+  cleanData();
+  createModel();
+  configModel();
+
+  if (isDataLoaded){
+    trainModel().then(results => {
+      console.log(results.history.loss);
+    });
+  }
+}
+
+function draw(){
+  background(51);
+  stroke(255, 0, 255);
+  strokeWeight(3);
+  line(frameCount % width, 0, frameCount % width, height);
+}
+
+/**
+Gets all the entries,
+normalize rgb colors,
+make onehot output;
+**/
+function cleanData(){
   let colors = [];
   let labels = [];
 
@@ -39,8 +64,15 @@ function setup() {
   ys = tf.oneHot(labelsTensor, 9);
 
   labelsTensor.dispose();
+}
 
-  //Tensorflow neural network 3 inputs, 16 hidden, 9 outputs
+/**
+Make a dense neural Network
+shape the hidden & output layer
+Add them to the model
+// 3 inputs, 16 hidden, 9 outputs
+**/
+function createModel() {
   model = tf.sequential();
 
   let hidden = tf.layers.dense({
@@ -56,7 +88,13 @@ function setup() {
 
   model.add(hidden);
   model.add(output);
+}
 
+/**
+optimize model with stochastic gradient descent
+Compile it
+**/
+function configModel(){
   const LEARNING_RATE = 0.25;
   const opt = tf.train.sgd(LEARNING_RATE);
 
@@ -64,15 +102,13 @@ function setup() {
     optimizer: opt,
     loss: 'categoricalCrossentropy'
   });
-
-  if (isDataLoaded){
-    trainModel().then(results => {
-      console.log(results.history.loss);
-    });
-  }
 }
 
-
+/**
+Heart of the code ->
+sets the configurations for each interaction
+adjust the weights
+**/
 async function trainModel() {
   const options = {
     epochs: 3,
@@ -90,12 +126,4 @@ async function trainModel() {
   };
 
   return await model.fit(xs, ys, options);
-}
-
-function draw(){
-  background(51);
-  stroke(255, 0, 255);
-  strokeWeight(3);
-  line(frameCount % width, 0, frameCount % width, height);
-  // ellipse(50, 50, )
 }
