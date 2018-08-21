@@ -7,6 +7,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <title>color classifier</title>
+  <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/p5.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/addons/p5.dom.min.js"></script>
@@ -15,6 +19,34 @@
 </head>
 
 <body>
+    <div id="main" class="card">
+        <div id="rgb-Canvas">s</div>
+        <div class="color-Picker">
+            <div class="single-Slider">
+                <p>R</p>
+                <input type="range" min="0" max="255" value="255" class="slider" id="red-slider">
+            </div>
+            <div class="single-Slider">
+                <p>G</p>
+                <input type="range" min="0" max="255" value="99" class="slider" id="green-slider">
+            </div>
+            <div class="single-Slider">
+                <p>B</p>
+                <input type="range" min="0" max="255" value="255" class="slider" id="blue-slider">
+            </div>
+            <div id="prediction" class="pred">Color: </div>
+        </div>
+        <div class="seperator"></div>
+        <div id="graph-Container">
+            <div id="loss">Loss: </div>
+            <div id="graph"></div>
+        </div>
+        <button id="train" class="btn">Start Training</button>
+        <div class="load-Save">
+            <p><b>Note:</b> When saving a model, the topology and weights <br> will be saved to your browsers <code>indexedDB</code> storage</p>
+            <button id="load" class="btn">Load Model</button>
+            <button id="save" class="btn">Save Model</button>
+        </div>
+    </div>
 </body>
-
 </html>

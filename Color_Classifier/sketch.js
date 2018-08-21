@@ -24,24 +24,38 @@ function preload() {
   }
 }
 
+
 function setup() {
+  let canvas = select("#rgb-Canvas");
+  // let canvasDiv = select("#rgb-Canvas");
+  // canvasDiv.parent(canvas);
 
-  cleanData();
-  createModel();
-  configModel();
-
-  if (isDataLoaded){
-    trainModel().then(results => {
-      console.log(results.history.loss);
-    });
-  }
+  tf.tidy(() => {
+    cleanData();
+    createModel();
+    configModel();
+  });
 }
 
 function draw(){
-  background(51);
-  stroke(255, 0, 255);
-  strokeWeight(3);
-  line(frameCount % width, 0, frameCount % width, height);
+
+  let r = select("#red-slider").value();
+  let g = select("#green-slider").value();
+  let b = select("#blue-slider").value();
+
+  let colorPrediction = select("#prediction");
+  let index;
+
+  tf.tidy(() => {
+    const xs = tf.tensor2d([
+      [r/255, g/255, b/255]
+    ]);
+    let results = model.predict(xs);
+    index = results.argMax(1).dataSync()[0];
+  });
+
+  colorPrediction.html(`Color: ${labelList[index]}`);
+  background(r, g, b);
 }
 
 /**
@@ -117,8 +131,8 @@ async function trainModel() {
     callbacks: {
       onTrainBegin: () => console.log("Training Started"),
       onTrainEnd: () => console.log("Training Completed"),
+      onBatchEnd: tf.nextFrame,
       onEpochEnd: async(num, logs) => {
-        await tf.nextFrame();
         console.log("Epoch: " + num);
         console.log("Loss: " + logs.loss);
       }

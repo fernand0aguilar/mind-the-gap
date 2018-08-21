@@ -1,3 +1,8 @@
+/**
+Gets data on firebase
+saves it to json
+**/
+
 let filter = {
   'YGdqOTDDmrbGm80gM5UHicxMBgS2': true,
   'HUXmyv1dSSUnIvYk976MPWUSaTG2': true,
