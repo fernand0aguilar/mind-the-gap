@@ -33,7 +33,6 @@ function setup() {
   tf.tidy(() => {
     cleanData();
     createModel();
-    configModel();
   });
 }
 
@@ -90,7 +89,7 @@ function createModel() {
   model = tf.sequential();
 
   let hidden = tf.layers.dense({
-    units: 16,
+    units: 4,
     activation: 'sigmoid',
     inputDim: 3
   });
@@ -102,13 +101,7 @@ function createModel() {
 
   model.add(hidden);
   model.add(output);
-}
 
-/**
-optimize model with stochastic gradient descent
-Compile it
-**/
-function configModel(){
   const LEARNING_RATE = 0.25;
   const opt = tf.train.sgd(LEARNING_RATE);
 
@@ -117,6 +110,7 @@ function configModel(){
     loss: 'categoricalCrossentropy'
   });
 }
+
 
 /**
 Heart of the code ->
