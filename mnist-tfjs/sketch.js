@@ -1,15 +1,17 @@
-let testData;
-let trainData;
+let testFile, trainFile;
 let model;
 
-let xs, ys;
+let trainData, testData;
+
+let trainButton, testButton;
 
 const IMG_SIZE = 784;
+const DATA_AMOUNT = 10000;
 
 function preload() {
   // testData = loadTable("zdata/example.csv", "csv", "header");
-  trainData = loadTable("zdata/train1001.csv", 'csv', 'header');
-  // testData = loadTable("zdata/test1001.csv", 'csv', 'header');
+  trainFile = loadTable("zdata/train10001.csv", 'csv', 'header');
+  testData = loadTable("zdata/test10001.csv", 'csv', 'header');
 }
 
 function cleanData(data){
@@ -23,10 +25,12 @@ function cleanData(data){
   }
 
   let labelsTensor = tf.tensor1d(labels, 'int32');
-  xs = tf.tensor2d(values);
-  ys = tf.oneHot(labelsTensor, 10);
+  const xs = tf.tensor2d(values, [DATA_AMOUNT, IMG_SIZE] ,'int32');
+  const ys = tf.oneHot(labelsTensor, 10);
 
   labelsTensor.dispose();
+
+  return {xs, ys};
 }
 
 //TODO -> [3,3,10] conv, [1,1,1] conv, [,256] dense, [,10] dense, batch size 56, epochs 13
@@ -34,7 +38,7 @@ function createModel(){
   model = tf.sequential();
 
   const hidden = tf.layers.dense({
-    inputShape: [784],
+    inputDim: 784,
     units: 3,
     activation: 'sigmoid'
   });
@@ -47,19 +51,22 @@ function createModel(){
   model.add(hidden);
   model.add(output);
 
+  const LEARNING_RATE = 0.03;
+  const opt = tf.train.sgd(LEARNING_RATE);
+
   const config = {
-    optimizer: tf.train.sgd(0.25),
-    loss: 'meanSquaredError'
-  }
+    optimizer: opt,
+    loss: 'categoricalCrossentropy'
+  };
 
   model.compile(config);
 }
 
-async function trainModel(){
+async function trainModel(data){
   const options = {
-    epochs: 9,
+    epochs: 12,
     shuffle: true,
-    batchSize: 56,
+    batchSize: 60,
     callbacks: {
       onTrainBegin: () => console.log("Training Started"),
       onTrainEnd: () => console.log("Training Completed"),
@@ -70,34 +77,36 @@ async function trainModel(){
     }
   };
 
-  return await model.fit(xs, ys, options);
+  return await model.fit(data.xs, data.ys, options);
+}
+
+function testModel(data){
+  const result = model.evaluate(data.xs, data.ys);
+  result.print();
 }
 
 function handleButtons(){
-  let trainButton = createButton("Train");
-  let testButton = createButton("Test");
-
   trainButton.mouseClicked(() => {
-    console.log("bor");
+    trainModel(trainData);
   });
+
   testButton.mousePressed(() => {
-    console.log("boleta");
+    console.log("Testing");
+    testModel(testData);
   });
 }
 
 function setup() {
   createCanvas(200, 200);
   background(0);
-  cleanData(trainData);
-
-  handleButtons();
 
   createModel();
-  // trainModel();
+  trainData = cleanData(trainFile);
+  testData = trainData;
 
-  //console.log(xs.shape);
-  // const example = tf.tensor2d(values, shape, 'int32');
-  // example.dispose();
+  trainButton = createButton("Train");
+  testButton = createButton("Test");
+
 }
 
 function draw() {
@@ -107,4 +116,6 @@ function draw() {
   if (mouseIsPressed) {
     line(pmouseX, pmouseY, mouseX, mouseY);
   }
+
+  handleButtons();
 }
