@@ -23,7 +23,7 @@ function createModel(){
 
   const hidden = tf.layers.dense({
     inputDim: 784,
-    units: 3,
+    units: 18,
     activation: 'sigmoid'
   });
 
@@ -35,7 +35,7 @@ function createModel(){
   model.add(hidden);
   model.add(output);
 
-  const LEARNING_RATE = 0.03;
+  const LEARNING_RATE = 0.06;
   const opt = tf.train.sgd(LEARNING_RATE);
 
   const config = {
@@ -48,14 +48,14 @@ function createModel(){
 
 async function trainModel(data){
   const options = {
-    epochs: 12,
+    epochs: 9,
     shuffle: true,
     batchSize: 60,
     callbacks: {
       onTrainBegin: () => console.log("Training Started"),
       onTrainEnd: () => console.log("Training Completed"),
       onEpochEnd: async(num, logs) => {
-        console.log("Epoch: " + num);
+        console.log("Epoch: " + (num+1));
         console.log("Loss: " + logs.loss);
       }
     }

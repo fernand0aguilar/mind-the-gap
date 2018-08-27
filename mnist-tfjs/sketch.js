@@ -1,9 +1,10 @@
+
 let model;
 
 let testFile, trainFile;
 let trainData, testData;
 
-let trainButton, testButton, guessButton;
+let trainButton, testButton, guessButton, clearbutton;
 
 const IMG_SQUARE = 28;
 const IMG_SIZE = IMG_SQUARE * IMG_SQUARE;
@@ -11,10 +12,9 @@ let DATA_AMOUNT;
 
 
 function preload() {
-  trainFile = loadTable("zdata/train1001.csv", 'csv', 'header');
+  trainFile = loadTable("zdata/train10001.csv", 'csv', 'header');
   // testFile = loadTable("zdata/test1001.csv", 'csv', 'header');
   testFile = trainFile;
-  console.log(trainFile);
 }
 
 
@@ -32,10 +32,14 @@ function handleButtons(){
   guessButton.mousePressed(() => {
     guess();
   });
+
+  clearbutton.mousePressed(() => {
+    background(0);
+  });
 }
 
 function setup() {
-  createCanvas(200, 200);
+  createCanvas(280, 280);
   background(0);
   DATA_AMOUNT = trainFile.rows.length;
 
@@ -50,6 +54,7 @@ function setup() {
   trainButton = createButton("Train");
   testButton = createButton("Test");
   guessButton = createButton("Guess");
+  clearbutton = createButton("Clear")
 }
 
 function guess(){
@@ -61,10 +66,11 @@ function guess(){
     let bright = img.pixels[i * 4];
     inputs[i] = (bright) / 255.0;
   }
-  let xs = tf.tensor2d(inputs);
-  const guess = model.predict(inputs);
+  let xs = tf.tensor2d(inputs, [1, 784]);
+  const guess = model.predict(xs);
+  let prediction = guess.argMax(1).dataSync()[0];
 
-  let prediction = createP("Number: " + indexOf(guess.argMax(1)));
+  createP("Number: " + prediction);
 }
 
 function draw() {
@@ -74,6 +80,7 @@ function draw() {
   if (mouseIsPressed) {
     line(pmouseX, pmouseY, mouseX, mouseY);
   }
-
-  handleButtons();
+  tf.tidy(() => {
+    handleButtons();
+  });
 }
