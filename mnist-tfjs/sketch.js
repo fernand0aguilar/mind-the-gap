@@ -3,9 +3,11 @@ let model;
 let testFile, trainFile;
 let trainData, testData;
 
-let trainButton, testButton;
+let trainButton, testButton, guessButton;
+
+const IMG_SQUARE = 28;
+const IMG_SIZE = IMG_SQUARE * IMG_SQUARE;
 let DATA_AMOUNT;
-const IMG_SIZE = 784;
 
 
 function preload() {
@@ -37,12 +39,27 @@ function setup() {
   trainData = cleanData(trainFile);
 
   //TODO -> fix train data without label
-  
+
   // testData = cleanData(trainFile);
   testData = trainData;
 
   trainButton = createButton("Train");
   testButton = createButton("Test");
+  guessButton = createButton("Guess");
+}
+
+function guess(){
+  let inputs = [];
+  let img = get();
+  img.resize(IMG_SQUARE, IMG_SQUARE);
+  img.loadPixels();
+  for (let i = 0; i < IMG_SIZE; i++) {
+    let bright = img.pixels[i * 4];
+    inputs[i] = (255 - bright) / 255.0;
+  }
+  let xs = tf.tensor2d(inputs.argMax(1));
+  const guess = model.predict(inputs)
+
 }
 
 function draw() {
