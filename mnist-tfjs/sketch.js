@@ -28,6 +28,10 @@ function handleButtons(){
     const result = model.evaluate(testData.xs, testData.ys, {batchSize: 30});
     result.print();
   });
+
+  guessButton.mousePressed(() => {
+    guess();
+  });
 }
 
 function setup() {
@@ -55,11 +59,12 @@ function guess(){
   img.loadPixels();
   for (let i = 0; i < IMG_SIZE; i++) {
     let bright = img.pixels[i * 4];
-    inputs[i] = (255 - bright) / 255.0;
+    inputs[i] = (bright) / 255.0;
   }
-  let xs = tf.tensor2d(inputs.argMax(1));
-  const guess = model.predict(inputs)
+  let xs = tf.tensor2d(inputs);
+  const guess = model.predict(inputs);
 
+  let prediction = createP("Number: " + indexOf(guess.argMax(1)));
 }
 
 function draw() {
