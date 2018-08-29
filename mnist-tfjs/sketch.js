@@ -5,6 +5,7 @@ let testFile, trainFile;
 let trainData, testData;
 
 let trainButton, testButton, guessButton, clearbutton;
+let pred;
 
 const IMG_SQUARE = 28;
 const IMG_SIZE = IMG_SQUARE * IMG_SQUARE;
@@ -55,6 +56,7 @@ function setup() {
   testButton = createButton("Test");
   guessButton = createButton("Guess");
   clearbutton = createButton("Clear")
+  pred = select("#prediction");
 }
 
 function guess(){
@@ -70,7 +72,7 @@ function guess(){
   const guess = model.predict(xs);
   let prediction = guess.argMax(1).dataSync()[0];
 
-  createP("Number: " + prediction);
+  pred.html("Number: " + prediction);
 }
 
 function draw() {

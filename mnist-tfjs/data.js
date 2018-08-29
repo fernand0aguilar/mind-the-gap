@@ -35,7 +35,7 @@ function createModel(){
   model.add(hidden);
   model.add(output);
 
-  const LEARNING_RATE = 0.06;
+  const LEARNING_RATE = 0.09;
   const opt = tf.train.sgd(LEARNING_RATE);
 
   const config = {
@@ -48,15 +48,14 @@ function createModel(){
 
 async function trainModel(data){
   const options = {
-    epochs: 9,
+    epochs: 30,
     shuffle: true,
-    batchSize: 60,
+    batchSize: 90,
     callbacks: {
       onTrainBegin: () => console.log("Training Started"),
       onTrainEnd: () => console.log("Training Completed"),
       onEpochEnd: async(num, logs) => {
-        console.log("Epoch: " + (num+1));
-        console.log("Loss: " + logs.loss);
+        console.log("Epoch: " + (num+1) + " - Loss: " + logs.loss);
       }
     }
   };
