@@ -1,3 +1,8 @@
+// TODO -> Refactor
+// Load model on beginning
+// Post on github pages.
+
+
 let data;
 let model;
 let xs, ys;
