@@ -47,7 +47,7 @@ function draw() {
 	col = color(col.x, col.y, col.z);
 
 	fill(col);
-	ellipse(90, 90, 180)
+	ellipse(90, 90, 180);
 	
 	div.html(colorName);
 	div.style("color", col);
